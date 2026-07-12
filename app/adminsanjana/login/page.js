@@ -23,7 +23,7 @@ export default function LoginPage() {
     });
 
     if (signInError) {
-      setError("Incorrect email or password.");
+      setError(`DEBUG: ${signInError.message} (status: ${signInError.status})`);
       setLoading(false);
       return;
     }
