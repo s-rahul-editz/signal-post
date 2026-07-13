@@ -2,10 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "../../../lib/supabase-browser";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -16,19 +14,20 @@ export default function LoginPage() {
     setLoading(true);
     setError("");
 
-    const supabase = createClient();
-    const { error: signInError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+    const res = await fetch("/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password }),
     });
 
-    if (signInError) {
-      setError("Incorrect email or password.");
+    if (!res.ok) {
+      setError("Incorrect password.");
       setLoading(false);
       return;
     }
 
     router.push("/adminsanjana");
+    router.refresh();
   }
 
   return (
@@ -36,14 +35,6 @@ export default function LoginPage() {
       <div className="eyebrow">Restricted access</div>
       <h1 style={{ fontSize: 28, margin: "8px 0 24px" }}>Sign in</h1>
       <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          style={inputStyle}
-        />
         <input
           type="password"
           placeholder="Password"
