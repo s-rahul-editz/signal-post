@@ -1,14 +1,12 @@
 "use client";
 
-import { createClient } from "../../lib/supabase-browser";
 import { useRouter } from "next/navigation";
 
 export default function LogoutButton() {
   const router = useRouter();
 
   async function handleLogout() {
-    const supabase = createClient();
-    await supabase.auth.signOut();
+    await fetch("/api/logout", { method: "POST" });
     router.push("/adminsanjana/login");
     router.refresh();
   }
