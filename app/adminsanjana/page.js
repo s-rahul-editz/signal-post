@@ -1,8 +1,18 @@
-import { requireAuth } from "../../lib/requireAuth";
+"use client";
+
+import { useAdminAuth } from "../../lib/useAdminAuth";
 import LogoutButton from "./LogoutButton";
 
-export default async function AdminDashboard() {
-  const profile = await requireAuth();
+export default function AdminDashboard() {
+  const { profile, loading } = useAdminAuth();
+
+  if (loading) {
+    return (
+      <div className="container" style={{ paddingTop: 40 }}>
+        <p style={{ color: "var(--ink-soft)" }}>Checking access...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="container" style={{ paddingTop: 40 }}>
@@ -11,11 +21,10 @@ export default async function AdminDashboard() {
         Welcome, {profile.display_name}.
       </h1>
       <p style={{ color: "var(--ink-soft)", maxWidth: 480 }}>
-        The login gate is working — this page only renders for a signed-in account
-        with a valid profile. Post management (create, edit, publish) is the next
-        thing we build here.
+        The login gate is working — this page only renders once the browser confirms
+        a valid session and profile. Post management (create, edit, publish) is next.
       </p>
       <LogoutButton />
     </div>
   );
-          }
+}
