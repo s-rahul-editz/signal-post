@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { createClient } from "../../../lib/supabase-browser";
 
 export default function LoginPage() {
@@ -8,6 +9,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -26,11 +28,7 @@ export default function LoginPage() {
       return;
     }
 
-    // Force a full page reload (not a soft client-side navigation) so the browser
-    // is guaranteed to send the freshly-set session cookie on the very next request.
-    // Without this, the middleware can sometimes evaluate the redirect before the
-    // cookie write has fully landed, bouncing back to login even after a successful sign-in.
-    window.location.href = "/adminsanjana";
+    router.push("/adminsanjana");
   }
 
   return (
